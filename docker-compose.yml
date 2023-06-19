@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  shorter_redis:
+    container_name: shorter_redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+
+  shorter_api:
+    container_name: shorter_api
+    restart: always
+    build:
+      context: "./links-shorter-api/"
+      dockerfile: "Dockerfile"
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      - PORT=${PORT:-5000}
+      - DB_URI=${DB_URI}
+      - REACT_APP_URL=${REACT_APP_URL}
+      - BASE_URL=${BASE_URL}
+      - REDIS_HOST=${REDIS_HOST}
+    depends_on:
+      shorter_redis:
+        condition: service_healthy
+
+  shorter_app:
+    container_name: shorter_app
+    restart: always
+    build:
+      context: "./links-shorter-app/"
+      dockerfile: "Dockerfile"
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+    depends_on:
+      - shorter_api
+
+volumes:
+  redis_data:

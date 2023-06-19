@@ -1,0 +1,32 @@
+html {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #9BC1BC;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #678B87;
+}
+
+.header {
+    left: 0;
+    right: 0;
+}
+
+.container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.big-container {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+
